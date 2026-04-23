@@ -21,49 +21,49 @@ export default function Hero() {
               <Package size={14} />
               Venta Exclusiva Mayorista
             </div>
-            <h1 className="text-6xl md:text-8xl font-anton leading-[0.9] text-neutral-900 mb-6">
+            <h1 className="text-5xl md:text-8xl font-anton leading-[0.9] text-neutral-900 mb-6">
               IMPULSÁ TU <span className="text-primary">NEGOCIO</span> CON FLYWING
             </h1>
-            <p className="text-lg text-neutral-gray font-montserrat max-w-lg mb-8 leading-relaxed">
+            <p className="text-base md:text-lg text-neutral-gray font-montserrat max-w-lg mb-8 leading-relaxed">
               Catálogo actualizado con las últimas tendencias en calzado. 
               Packs curados por talle y modelo para maximizar tu rotación de stock.
             </p>
             
-            <div className="flex flex-wrap gap-4 mb-12">
-              <Link to="/catalogo">
-                <Button className="bg-primary hover:bg-primary/90 text-white h-14 px-8 rounded-full text-lg group">
+            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <Link to="/catalogo" className="w-full sm:w-auto">
+                <Button className="w-full bg-primary hover:bg-primary/90 text-white h-14 px-8 rounded-full text-lg group">
                   VER CATÁLOGO
                   <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link to="/contacto">
-                <Button variant="outline" className="border-secondary text-secondary hover:bg-secondary/10 h-14 px-8 rounded-full text-lg">
+              <Link to="/contacto" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full border-secondary text-secondary hover:bg-secondary/10 h-14 px-8 rounded-full text-lg">
                   MÍNIMO DE COMPRA
                 </Button>
               </Link>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 border-t border-neutral-100 pt-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 border-t border-neutral-100 pt-8">
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 text-primary">
                   <Truck size={18} />
-                  <span className="font-anton text-xl">ENVÍOS</span>
+                  <span className="font-anton text-lg md:text-xl">ENVÍOS</span>
                 </div>
-                <span className="text-xs text-neutral-gray font-poppins uppercase">A todo el país</span>
+                <span className="text-[10px] md:text-xs text-neutral-gray font-poppins uppercase">A todo el país</span>
               </div>
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 text-primary">
                   <Package size={18} />
-                  <span className="font-anton text-xl">PACKS</span>
+                  <span className="font-anton text-lg md:text-xl">PACKS</span>
                 </div>
-                <span className="text-xs text-neutral-gray font-poppins uppercase">Por talle/modelo</span>
+                <span className="text-[10px] md:text-xs text-neutral-gray font-poppins uppercase">Por talle/modelo</span>
               </div>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1 col-span-2 md:col-span-1 border-t border-neutral-100 pt-4 md:border-none md:pt-0">
                 <div className="flex items-center gap-2 text-primary">
                   <ShieldCheck size={18} />
-                  <span className="font-anton text-xl">CALIDAD</span>
+                  <span className="font-anton text-lg md:text-xl">CALIDAD</span>
                 </div>
-                <span className="text-xs text-neutral-gray font-poppins uppercase">Garantizada</span>
+                <span className="text-[10px] md:text-xs text-neutral-gray font-poppins uppercase">Garantizada</span>
               </div>
             </div>
           </motion.div>

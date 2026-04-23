@@ -7,7 +7,9 @@ export interface Sneaker {
   pack_size: number;
   created_at: string;
   imagenes_producto?: {
+    id: number;
     url: string;
+    color_variante?: string;
   }[];
 }
 

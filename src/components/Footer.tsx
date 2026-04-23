@@ -35,8 +35,8 @@ export default function Footer() {
           </div>
 
           <div className="col-span-1 md:col-span-2">
-            <h4 className="font-anton text-xl mb-6 tracking-widest">NAVEGACIÓN</h4>
-            <ul className="flex flex-wrap gap-x-8 gap-y-4 font-poppins text-sm text-neutral-400 uppercase tracking-tighter">
+            <h4 className="font-anton text-xl mb-6 tracking-widest text-center md:text-left">NAVEGACIÓN</h4>
+            <ul className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4 font-poppins text-sm text-neutral-400 uppercase tracking-tighter text-center">
               <li><Link to="/" className="hover:text-primary transition-colors">Inicio</Link></li>
               <li><Link to="/catalogo" className="hover:text-primary transition-colors">Productos</Link></li>
               <li><Link to="/nosotros" className="hover:text-primary transition-colors">Nosotros</Link></li>

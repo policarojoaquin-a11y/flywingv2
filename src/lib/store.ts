@@ -8,6 +8,7 @@ export interface CartItem {
   packs: number;
   pack_size: number;
   category: string;
+  imageUrl?: string;
 }
 
 interface CartStore {

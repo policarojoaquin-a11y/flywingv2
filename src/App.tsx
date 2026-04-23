@@ -10,6 +10,7 @@ import Hero from "./components/Hero";
 import Catalog from "./components/Catalog";
 import AboutUs from "./components/AboutUs";
 import ContactForm from "./components/ContactForm";
+import Admin from "./components/Admin";
 import Footer from "./components/Footer";
 import { MessageCircle } from "lucide-react";
 
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="/catalogo" element={<Catalog />} />
             <Route path="/nosotros" element={<AboutUs />} />
             <Route path="/contacto" element={<ContactForm />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </main>
         <Footer />
