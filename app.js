@@ -1,22 +1,23 @@
 import { execSync } from 'child_process';
 import { existsSync } from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+console.log('=== app.js iniciado ===');
+console.log('dist existe:', existsSync('./dist'));
+console.log('dist/server-core.js existe:', existsSync('./dist/server-core.js'));
 
-// Correr npm run build si la carpeta dist/ no existe
-if (!existsSync('./dist')) {
-  console.log('Building for Hostinger...');
+if (!existsSync('./dist/server-core.js')) {
+  console.log('Corriendo build...');
   try {
     execSync('npm run build', { stdio: 'inherit' });
-  } catch (err) {
-    console.error('Build failed:', err);
+    console.log('Build completado');
+  } catch (e) {
+    console.error('Error en build:', e.message);
     process.exit(1);
   }
 }
 
-// Importar y arrancar el servidor desde dist/server-core.js
-console.log('Starting production server...');
-import('./dist/server-core.js');
+console.log('Importando servidor...');
+import('./dist/server-core.js').catch(e => {
+  console.error('Error al importar servidor:', e);
+  process.exit(1);
+});
