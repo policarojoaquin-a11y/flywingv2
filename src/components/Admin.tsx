@@ -4,12 +4,13 @@ import { Sneaker } from "@/src/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Upload, Trash2, LogOut, Image as ImageIcon } from "lucide-react";
+import { Loader2, Upload, Trash2, LogOut, Image as ImageIcon, Eye, EyeOff } from "lucide-react";
 
 export default function Admin() {
   const [session, setSession] = useState<any>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [sneakers, setSneakers] = useState<Sneaker[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -214,7 +215,7 @@ export default function Admin() {
       <div className="min-h-screen pt-32 pb-12 flex items-center justify-center bg-neutral-50 px-4">
         <Card className="w-full max-w-md border-none shadow-2xl rounded-3xl overflow-hidden">
           <CardHeader className="bg-primary text-white p-8 text-center">
-            <CardTitle className="text-3xl font-anton tracking-widest">FLY <span className="text-white/80">WING</span> ADMIN</CardTitle>
+            <CardTitle className="text-3xl font-anton tracking-widest">FLYWING <span className="text-white/80"></span> ADMIN</CardTitle>
             <p className="text-white/70 text-xs uppercase tracking-tighter mt-2 font-poppins">Ingreso exclusivo para administradores</p>
           </CardHeader>
           <CardContent className="p-8">
@@ -231,13 +232,22 @@ export default function Admin() {
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Contraseña</label>
-                <Input 
-                  type="password" 
-                  value={password} 
-                  onChange={e => setPassword(e.target.value)} 
-                  required 
-                  className="rounded-xl border-neutral-200 h-12"
-                />
+                <div className="relative">
+                  <Input 
+                    type={showPassword ? "text" : "password"} 
+                    value={password} 
+                    onChange={e => setPassword(e.target.value)} 
+                    required 
+                    className="rounded-xl border-neutral-200 h-12 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
               </div>
               <Button 
                 type="submit" 
