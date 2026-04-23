@@ -1,12 +1,14 @@
-import { execSync } from 'child_process';
-import { existsSync } from 'fs';
+import express from 'express';
+import { setupServer } from './dist/server-core.js';
 
-if (!existsSync('./dist/server-core.js')) {
-  console.log('Building...');
-  execSync('npm run build', { stdio: 'inherit' });
-}
+const app = express();
 
-import('./dist/server-core.js').catch(e => {
-  console.error('Error al iniciar servidor:', e);
+setupServer(app).then(() => {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor corriendo en puerto ${PORT}`);
+  });
+}).catch(err => {
+  console.error('Error fatal:', err);
   process.exit(1);
 });

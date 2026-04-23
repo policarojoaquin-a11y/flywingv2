@@ -121,25 +121,3 @@ export async function setupServer(app: express.Express) {
     });
   }
 }
-
-// Start server if run directly (development)
-const currentFile = fileURLToPath(import.meta.url);
-const isEntryPoint = process.argv[1] && (
-  path.resolve(process.argv[1]) === path.resolve(currentFile) ||
-  process.argv[1].endsWith('server.ts')
-);
-
-if (isEntryPoint || !process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-  console.log("Entry point detected, starting server...");
-  const app = express();
-  setupServer(app).then(() => {
-    const PORT = 3000;
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`--- DEV SERVER ACTIVE ---`);
-      console.log(`Port: ${PORT}`);
-      console.log(`-------------------------`);
-    });
-  }).catch(err => {
-    console.error("FATAL: Failed to start dev server", err);
-  });
-}
