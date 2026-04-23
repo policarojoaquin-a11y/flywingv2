@@ -5,8 +5,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { CartDrawer } from "./CartDrawer";
-// @ts-ignore
-import logo from "../assets/logo.png";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -46,7 +44,7 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <img src={logo} alt="Flywing Logo" className="h-10 w-auto" />
+          <img src="/logo.png" alt="Flywing Logo" className="h-10 w-auto" />
         </Link>
 
         {/* Desktop Nav */}

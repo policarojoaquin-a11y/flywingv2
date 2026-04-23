@@ -1,7 +1,5 @@
 import { Instagram, Facebook, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-// @ts-ignore
-import logo from "../assets/logo.png";
 
 export default function Footer() {
   return (
@@ -10,7 +8,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-6">
-              <img src={logo} alt="Flywing Logo" className="h-10 w-auto brightness-0 invert" />
+              <img src="/logo.png" alt="Flywing Logo" className="h-10 w-auto brightness-0 invert" />
             </Link>
             <p className="text-neutral-400 font-poppins max-w-sm mb-8">
               Tu socio estratégico en calzado mayorista. 
