@@ -15,7 +15,8 @@
     "start": "node app.js",
     "preview": "vite preview",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "express": "^4.21.2",
