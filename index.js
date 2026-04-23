@@ -1,23 +1,36 @@
 /**
- * Entry file for Hostinger Node.js (Express)
+ * Entry file for Hostinger Node.js
+ * Optimized for Express recognition
  */
 import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// Force production environment
-process.env.NODE_ENV = 'production';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Import the actual compiled server
-import('./dist/server.js').catch(err => {
-  console.error("Build folder 'dist' not found yet. Starting minimal server for Hostinger validation.");
-  
-  const app = express();
-  const PORT = process.env.PORT || 3000;
-  
-  app.get('*', (req, res) => {
-    res.send('Servidor Flywing en espera de compilación. Por favor, ejecuta "npm run build" en el panel de Hostinger.');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware básico para que Hostinger lo vea como Express
+app.use(express.json());
+
+// Intentar cargar la lógica del servidor real de forma segura
+async function start() {
+  try {
+    // Si ya existe el build, lo cargamos
+    const { setupServer } = await import('./dist/server-core.js');
+    setupServer(app);
+  } catch (err) {
+    console.log("Aún no se ha realizado el build. Mostrando página de espera.");
+    app.get('*', (req, res) => {
+      res.send('<h1>Servidor Flywing</h1><p>Por favor, ejecuta <b>npm run build</b> en tu panel de Hostinger para finalizar la instalación.</p>');
+    });
+  }
+
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
   });
-  
-  app.listen(PORT, () => {
-    console.log(`Minimal server running on port ${PORT}`);
-  });
-});
+}
+
+start();
