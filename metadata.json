@@ -1,5 +1,5 @@
 {
   "name": "Flywing Mayorista",
-  "description": "Catálogo exclusivo para ventas mayoristas de zapatillas Flywing. Packs por talle, mínimo de compra y contacto directo por WhatsApp.",
+  "description": "Catálogo mayorista de zapatillas Flywing con servidor Express y sincronización vía Google Sheets.",
   "requestFramePermissions": []
 }
