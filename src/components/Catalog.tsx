@@ -10,6 +10,17 @@ import { Input } from "@/components/ui/input";
 
 import { useSearchParams } from "react-router-dom";
 
+import { useCart } from "@/src/lib/store";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogFooter,
+  DialogTrigger
+} from "@/components/ui/dialog";
+import { Plus, Minus } from "lucide-react";
+
 const COLOR_MAP: Record<string, string> = {
   "negro": "#000000",
   "blanco": "#FFFFFF",
@@ -31,7 +42,8 @@ const COLOR_MAP: Record<string, string> = {
   "naranja": "#F97316",
 };
 
-const ColorSwatch = ({ colorName }: { colorName: string }) => {
+const ColorSwatch = (props: { colorName: string; [key: string]: any }) => {
+  const { colorName } = props;
   const normalized = colorName.toLowerCase().trim();
   // Handle combined colors like "Negro/Blanco"
   const colors = normalized.includes("/") ? normalized.split("/") : [normalized];
@@ -229,15 +241,7 @@ export default function Catalog() {
                       </div>
                     </CardContent>
                     <CardFooter className="p-6 pt-0">
-                      <Button 
-                        className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white rounded-full py-6 font-bold flex items-center justify-center gap-2"
-                        onClick={() => window.open(`https://wa.me/5491135677101?text=Hola! Me interesa el modelo ${sneaker.name}`, '_blank')}
-                      >
-                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.446 4.432-9.876 9.88-9.876a9.88 9.88 0 019.874 9.88c-.001 5.447-4.431 9.878-9.88 9.878m0-21.821C6.47 0 1.617 4.852 1.615 10.858c0 1.919.499 3.791 1.447 5.432L0 24l7.335-1.924a10.84 10.84 0 005.14 1.292h.005c6.012 0 10.864-4.853 10.866-10.86 0-2.912-1.133-5.649-3.191-7.707A10.81 10.81 0 0012.051 0z"/>
-                        </svg>
-                        CONSULTAR PRECIO
-                      </Button>
+                      <AddToCartDialog sneaker={sneaker} />
                     </CardFooter>
                   </Card>
                 </motion.div>
@@ -260,5 +264,114 @@ export default function Catalog() {
         </div>
       </div>
     </section>
+  );
+}
+
+function AddToCartDialog({ sneaker }: { sneaker: Sneaker }) {
+  const [selectedColor, setSelectedColor] = useState(sneaker.colors?.[0] || "");
+  const [packs, setPacks] = useState(1);
+  const [isOpen, setIsOpen] = useState(false);
+  const { addItem } = useCart();
+
+  const handleAdd = () => {
+    addItem({
+      id: sneaker.id,
+      name: sneaker.name,
+      color: selectedColor,
+      packs: packs,
+      pack_size: sneaker.pack_size,
+      category: sneaker.category
+    });
+    setIsOpen(false);
+    setPacks(1);
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger
+        render={
+          <Button className="w-full bg-primary hover:bg-primary/90 text-white rounded-full py-6 font-anton tracking-widest flex items-center justify-center gap-2">
+            <ShoppingBag size={18} />
+            COMPRAR AHORA
+          </Button>
+        }
+      />
+      <DialogContent className="sm:max-w-[425px] rounded-[2rem]">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-anton tracking-widest text-neutral-900">
+            PERSONALIZAR <span className="text-primary">PEDIDO</span>
+          </DialogTitle>
+        </DialogHeader>
+        
+        <div className="py-8 space-y-8">
+          <div className="flex gap-4 items-center p-5 bg-neutral-50 rounded-2xl border border-neutral-100">
+            <div className="w-16 h-16 rounded-xl bg-white overflow-hidden border border-neutral-200">
+              {sneaker.imagenes_producto?.[0]?.url && (
+                <img src={sneaker.imagenes_producto[0].url} alt={sneaker.name} className="w-full h-full object-cover" />
+              )}
+            </div>
+            <div>
+              <h4 className="font-anton text-xl uppercase leading-none mb-1 tracking-wide">{sneaker.name}</h4>
+              <p className="text-[10px] text-neutral-500 uppercase tracking-widest">{sneaker.category} • {sneaker.pack_size} pares x pack</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">Elegir Color</label>
+            <div className="flex flex-wrap gap-2">
+              {sneaker.colors?.map(color => (
+                <button
+                  key={color}
+                  onClick={() => setSelectedColor(color)}
+                  className={`px-4 py-2 rounded-full border text-xs font-medium transition-all ${
+                    selectedColor === color 
+                    ? "bg-primary text-white border-primary shadow-md scale-105" 
+                    : "bg-white text-neutral-600 border-neutral-200 hover:border-primary"
+                  }`}
+                >
+                  {color}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">Cantidad de Packs</label>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center border border-neutral-200 rounded-full h-12 overflow-hidden bg-white">
+                <button 
+                  className="px-4 h-full hover:bg-neutral-50 border-r border-neutral-200 transition-colors"
+                  onClick={() => setPacks(Math.max(1, packs - 1))}
+                >
+                  <Minus size={16} />
+                </button>
+                <div className="px-6 text-lg font-bold min-w-[60px] text-center">
+                  {packs}
+                </div>
+                <button 
+                  className="px-4 h-full hover:bg-neutral-50 border-l border-neutral-200 transition-colors"
+                  onClick={() => setPacks(packs + 1)}
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+              <div className="text-sm">
+                <p className="font-bold text-neutral-900">{packs * sneaker.pack_size} Pares en total</p>
+                <p className="text-[10px] text-neutral-400 uppercase tracking-widest">Mínimo 1 pack</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <DialogFooter className="sm:justify-start pt-4 border-t border-neutral-100">
+          <Button 
+            className="w-full bg-primary hover:bg-primary/90 text-white rounded-full h-16 font-anton tracking-widest text-xl"
+            onClick={handleAdd}
+          >
+            AGREGAR AL CARRITO
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

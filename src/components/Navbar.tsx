@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
+import { CartDrawer } from "./CartDrawer";
 // @ts-ignore
 import logo from "../assets/logo.png";
 
@@ -92,11 +93,7 @@ export default function Navbar() {
               )}
             </div>
           ))}
-          <Link to="/contacto">
-            <Button className="bg-primary hover:bg-primary/90 text-white rounded-full px-6">
-              MAYORISTAS
-            </Button>
-          </Link>
+          <CartDrawer />
         </div>
 
         {/* Mobile Nav */}
@@ -136,11 +133,9 @@ export default function Navbar() {
                     )}
                   </div>
                 ))}
-                <Link to="/contacto" className="mt-4">
-                  <Button className="bg-primary hover:bg-primary/90 text-white w-full py-6 text-lg">
-                    ACCESO MAYORISTA
-                  </Button>
-                </Link>
+              </div>
+              <div className="mt-auto border-t border-neutral-100 pt-6">
+                <CartDrawer />
               </div>
             </SheetContent>
           </Sheet>
