@@ -97,18 +97,49 @@ export async function setupServer(app: express.Express) {
   const distPath = path.join(process.cwd(), "dist");
   const distExists = fs.existsSync(distPath);
 
+  console.log(`Server Mode: ${isProd ? "Production" : "Development"}`);
+  console.log(`Dist Path Exists: ${distExists}`);
+
   if (!isProd || !distExists) {
-    console.log("Starting Vite in middleware mode...");
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
+    console.log("Initializing Vite middleware...");
+    try {
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: "spa",
+      });
+      app.use(vite.middlewares);
+      console.log("Vite middleware initialized.");
+    } catch (viteError) {
+      console.error("Failed to initialize Vite middleware:", viteError);
+    }
   } else {
-    console.log("Serving static files from dist...");
-    app.use(express.static(distPath));
+    console.log("Serving static files from dist/public...");
+    const clientPath = path.join(process.cwd(), "dist", "public");
+    app.use(express.static(clientPath));
     app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
+      res.sendFile(path.join(clientPath, "index.html"));
     });
   }
+}
+
+// Start server if run directly (development)
+const currentFile = fileURLToPath(import.meta.url);
+const isEntryPoint = process.argv[1] && (
+  path.resolve(process.argv[1]) === path.resolve(currentFile) ||
+  process.argv[1].endsWith('server.ts')
+);
+
+if (isEntryPoint || !process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  console.log("Entry point detected, starting server...");
+  const app = express();
+  setupServer(app).then(() => {
+    const PORT = 3000;
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`--- DEV SERVER ACTIVE ---`);
+      console.log(`Port: ${PORT}`);
+      console.log(`-------------------------`);
+    });
+  }).catch(err => {
+    console.error("FATAL: Failed to start dev server", err);
+  });
 }
