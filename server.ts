@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename);
 async function startServer() {
   console.log("Starting server initialization...");
   const app = express();
-  const PORT = process.env.PORT || 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
   // Supabase Setup
   const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://xqikzccsnzelpumevmxo.supabase.co';
