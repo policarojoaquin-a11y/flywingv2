@@ -75,7 +75,8 @@ export async function fetchSneakers(): Promise<Sneaker[]> {
   const { data, error } = await supabase
     .from('productos')
     .select('*, imagenes_producto(*)')
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .order('id', { foreignTable: 'imagenes_producto', ascending: true });
 
   if (error) {
     console.error('Error fetching sneakers:', error);
@@ -83,7 +84,8 @@ export async function fetchSneakers(): Promise<Sneaker[]> {
     if (error.code === 'PGRST125' || error.code === '42703') {
        const { data: simpleData, error: simpleError } = await supabase
          .from('productos')
-         .select('*, imagenes_producto(*)');
+         .select('*, imagenes_producto(*)')
+         .order('id', { foreignTable: 'imagenes_producto', ascending: true });
        if (simpleError) return [];
        return simpleData as unknown as Sneaker[];
     }
