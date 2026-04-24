@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { MessageCircle, Info, Loader2, ShoppingBag, Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { Sneaker } from "@/src/types";
@@ -75,54 +75,116 @@ const ColorSwatch = (props: { colorName: string; [key: string]: any }) => {
 
 const ImageSlider = ({ images, productName }: { images: any[], productName: string }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isImageLoading, setIsImageLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
+  const imgRef = React.useRef<HTMLImageElement>(null);
 
-  if (!images || images.length === 0) {
-    return (
-      <div className="w-full h-40 md:h-72 bg-neutral-100 flex flex-col items-center justify-center gap-2 text-neutral-400">
-        <ShoppingBag size={24} md:size={48} strokeWidth={1} />
-        <span className="text-[8px] md:text-[10px] uppercase tracking-widest font-medium">Imagen en proceso</span>
-      </div>
-    );
-  }
+  // When index changes, check for cache immediately
+  useEffect(() => {
+    // If image is already in cache, it might be complete immediately
+    const checkComplete = () => {
+      if (imgRef.current?.complete) {
+        setIsImageLoading(false);
+      }
+    };
+
+    checkComplete();
+    const raf = requestAnimationFrame(checkComplete);
+    
+    // Fallback: hide loader after 5 seconds no matter what
+    const fallback = setTimeout(() => {
+      setIsImageLoading(false);
+    }, 5000);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(fallback);
+    };
+  }, [currentIndex]);
+
+  // Handle the transition out of the loading overlay
+  useEffect(() => {
+    if (!isImageLoading) {
+      const timer = setTimeout(() => setShowLoader(false), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isImageLoading]);
 
   const handlePrevious = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
+    setIsImageLoading(true);
+    setShowLoader(true);
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const handleNext = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
+    setIsImageLoading(true);
+    setShowLoader(true);
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
+  if (!images || images.length === 0) {
+    return (
+      <div className="w-full h-40 md:h-72 bg-neutral-100 flex flex-col items-center justify-center gap-2 text-neutral-400">
+        <ShoppingBag size={24} className="md:w-12 md:h-12" strokeWidth={1} />
+        <span className="text-[8px] md:text-[10px] uppercase tracking-widest font-medium">Imagen en proceso</span>
+      </div>
+    );
+  }
+
   return (
-    <div className="relative group/slider w-full h-40 md:h-72 overflow-hidden bg-neutral-50">
-      <img
+    <div className="relative group/slider w-full h-40 md:h-72 overflow-hidden bg-white">
+      {/* Loading Overlay */}
+      <AnimatePresence>
+        {showLoader && (
+          <motion.div 
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="absolute inset-0 z-10 flex items-center justify-center bg-neutral-100/80 backdrop-blur-[2px]"
+          >
+            <div className="flex flex-col items-center gap-2">
+              <Loader2 className="animate-spin text-primary" size={32} />
+              <span className="text-[8px] uppercase tracking-[0.2em] font-anton text-primary/60">Cargando</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.img
+        ref={imgRef}
+        key={images[currentIndex].url}
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: !isImageLoading ? 1 : 0, scale: !isImageLoading ? 1 : 1.05 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         src={getOptimizedImageUrl(images[currentIndex].url, { width: 600, quality: 75 })}
         alt={`${productName} - vista ${currentIndex + 1}`}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         referrerPolicy="no-referrer"
         loading="lazy"
         decoding="async"
+        onLoad={() => setIsImageLoading(false)}
+        onError={() => setIsImageLoading(false)} // Don't stick if error
       />
       
       {images.length > 1 && (
         <>
           <button 
             onClick={handlePrevious}
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm p-1.5 rounded-full text-neutral-800 opacity-0 group-hover/slider:opacity-100 transition-opacity shadow-sm hover:bg-white"
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm p-1.5 rounded-full text-neutral-800 opacity-0 group-hover/slider:opacity-100 transition-opacity shadow-sm hover:bg-white z-20"
           >
             <ChevronLeft size={16} />
           </button>
           <button 
             onClick={handleNext}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm p-1.5 rounded-full text-neutral-800 opacity-0 group-hover/slider:opacity-100 transition-opacity shadow-sm hover:bg-white"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm p-1.5 rounded-full text-neutral-800 opacity-0 group-hover/slider:opacity-100 transition-opacity shadow-sm hover:bg-white z-20"
           >
             <ChevronRight size={16} />
           </button>
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-20">
             {images.map((_, i) => (
               <div 
                 key={i} 

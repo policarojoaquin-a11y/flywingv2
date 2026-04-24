@@ -9,16 +9,8 @@ export function cn(...inputs: ClassValue[]) {
  * Optimizes Supabase storage URLs by using the built-in image transformation service.
  * Converts /object/public/ to /render/image/public/ and appends transformation parameters.
  */
-export function getOptimizedImageUrl(url: string, options: { width?: number; quality?: number; format?: 'webp' | 'avif' | 'origin' } = {}) {
-  if (!url || !url.includes('supabase.co')) return url;
-  
-  const { width = 600, quality = 80, format = 'webp' } = options;
-  
-  // Try to convert object/public to render/image/public for Supabase Image Transformation
-  if (url.includes('/storage/v1/object/public/')) {
-    const transformedUrl = url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
-    return `${transformedUrl}?width=${width}&quality=${quality}&format=${format}`;
-  }
-  
+export function getOptimizedImageUrl(url: string, _options: { width?: number; quality?: number; format?: 'webp' | 'avif' | 'origin' } = {}) {
+  // We return the original URL because Supabase Image Transformation (the /render/ endpoint)
+  // is a paid service and might not be enabled, which explains why the images broke.
   return url;
 }
