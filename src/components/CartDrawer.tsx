@@ -10,6 +10,7 @@ import {
   SheetFooter
 } from "@/components/ui/sheet";
 import { useCart } from "@/src/lib/store";
+import { getOptimizedImageUrl } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -87,7 +88,12 @@ export function CartDrawer() {
                   <div key={`${item.id}-${item.color}`} className="flex gap-4 group">
                     <div className="w-16 h-16 rounded-xl bg-neutral-50 overflow-hidden border border-neutral-100 shrink-0">
                       {item.imageUrl ? (
-                        <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                        <img 
+                          src={getOptimizedImageUrl(item.imageUrl, { width: 100, quality: 70 })} 
+                          alt={item.name} 
+                          className="w-full h-full object-cover" 
+                          decoding="async"
+                        />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-neutral-300 bg-neutral-100">
                           <ShoppingCart size={20} />

@@ -3,6 +3,7 @@ import { MessageCircle, Info, Loader2, ShoppingBag, Search, X, ChevronLeft, Chev
 import React, { useState, useEffect } from "react";
 import { Sneaker } from "@/src/types";
 import { fetchSneakers } from "@/src/lib/supabase";
+import { getOptimizedImageUrl } from "@/lib/utils";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -97,12 +98,14 @@ const ImageSlider = ({ images, productName }: { images: any[], productName: stri
   };
 
   return (
-    <div className="relative group/slider w-full h-40 md:h-72 overflow-hidden">
+    <div className="relative group/slider w-full h-40 md:h-72 overflow-hidden bg-neutral-50">
       <img
-        src={images[currentIndex].url}
+        src={getOptimizedImageUrl(images[currentIndex].url, { width: 600, quality: 75 })}
         alt={`${productName} - vista ${currentIndex + 1}`}
         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         referrerPolicy="no-referrer"
+        loading="lazy"
+        decoding="async"
       />
       
       {images.length > 1 && (
@@ -376,7 +379,12 @@ function AddToCartDialog({ sneaker, isCompact = false }: { sneaker: Sneaker, isC
           <div className="flex gap-4 items-center p-3 md:p-5 bg-neutral-50 rounded-2xl border border-neutral-100">
             <div className="w-16 h-16 rounded-xl bg-white overflow-hidden border border-neutral-200">
               {colorImage && (
-                <img src={colorImage} alt={sneaker.name} className="w-full h-full object-cover transition-all duration-300" />
+                <img 
+                  src={getOptimizedImageUrl(colorImage, { width: 200, quality: 70 })} 
+                  alt={sneaker.name} 
+                  className="w-full h-full object-cover transition-all duration-300"
+                  decoding="async"
+                />
               )}
             </div>
             <div>
