@@ -45,17 +45,17 @@ export default function Navbar() {
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link id="navbar-logo-link" to="/" className="flex items-center gap-2 group">
           <img 
-            src="/logo.png" 
+            src="logo.png" 
             alt="Flywing Logo" 
             className="h-10 w-auto" 
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              // If the simple /logo.png fails, try /public/logo.png as a backup
-              if (!target.src.includes('public/logo.png')) {
-                target.src = '/public/logo.png';
-              }
+              target.style.display = 'none';
+              const billboard = target.nextElementSibling as HTMLElement;
+              if (billboard) billboard.style.display = 'block';
             }} 
           />
+          <span className="hidden billboard font-anton text-2xl text-primary tracking-tighter">FLYWING</span>
         </Link>
 
         {/* Desktop Nav */}

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowRight, Package, Truck, ShieldCheck, Loader2 } from "lucide-react";
+import { ArrowRight, Package, Truck, ShieldCheck, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -23,15 +23,13 @@ export default function Hero() {
     loadFeatured();
   }, []);
 
-  useEffect(() => {
-    if (featuredSneakers.length <= 1) return;
-    
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % featuredSneakers.length);
-    }, 5000);
-    
-    return () => clearInterval(interval);
-  }, [featuredSneakers]);
+  const handlePrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? featuredSneakers.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % featuredSneakers.length);
+  };
 
   return (
     <section id="inicio" className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-white">
@@ -133,7 +131,28 @@ export default function Hero() {
                       alt={featuredSneakers[currentIndex].name}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-6 md:p-10">
+
+                    {/* Navigation Buttons */}
+                    {featuredSneakers.length > 1 && (
+                      <div className="absolute inset-0 flex items-center justify-between px-4 z-30">
+                        <button
+                          onClick={handlePrevious}
+                          className="bg-white/30 backdrop-blur-md hover:bg-white/50 text-white p-2 rounded-full transition-all"
+                          aria-label="Anterior"
+                        >
+                          <ChevronLeft size={24} />
+                        </button>
+                        <button
+                          onClick={handleNext}
+                          className="bg-white/30 backdrop-blur-md hover:bg-white/50 text-white p-2 rounded-full transition-all"
+                          aria-label="Siguiente"
+                        >
+                          <ChevronRight size={24} />
+                        </button>
+                      </div>
+                    )}
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-6 md:p-10 pointer-events-none">
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
