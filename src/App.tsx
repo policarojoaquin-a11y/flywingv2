@@ -13,12 +13,15 @@ import ContactForm from "./components/ContactForm";
 import Admin from "./components/Admin";
 import Footer from "./components/Footer";
 import { MessageCircle } from "lucide-react";
+import { trackPageView, trackEvent } from "./lib/tracking";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Track page view on route change
+    trackPageView();
   }, [pathname]);
 
   return null;
@@ -46,6 +49,7 @@ export default function App() {
           href="https://wa.me/5491135677101?text=Hola! Vengo de la web y me gustaría consultar por el catálogo mayorista."
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackEvent("Contact")}
           className="fixed bottom-8 right-8 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center group"
           aria-label="Contactar por WhatsApp"
         >

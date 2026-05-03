@@ -43,8 +43,19 @@ export default function Navbar() {
       }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <img src="/logo.png" alt="Flywing Logo" className="h-10 w-auto" />
+        <Link id="navbar-logo-link" to="/" className="flex items-center gap-2 group">
+          <img 
+            src="/logo.png" 
+            alt="Flywing Logo" 
+            className="h-10 w-auto" 
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              // If the simple /logo.png fails, try /public/logo.png as a backup
+              if (!target.src.includes('public/logo.png')) {
+                target.src = '/public/logo.png';
+              }
+            }} 
+          />
         </Link>
 
         {/* Desktop Nav */}

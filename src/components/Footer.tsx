@@ -7,8 +7,18 @@ export default function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-6">
-              <img src="/logo.png" alt="Flywing Logo" className="h-10 w-auto brightness-0 invert" />
+            <Link id="footer-logo-link" to="/" className="flex items-center gap-2 mb-6">
+              <img 
+                src="/logo.png" 
+                alt="Flywing Logo" 
+                className="h-10 w-auto brightness-0 invert" 
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('public/logo.png')) {
+                    target.src = '/public/logo.png';
+                  }
+                }}
+              />
             </Link>
             <p className="text-neutral-400 font-poppins max-w-sm mb-8">
               Tu socio estratégico en calzado mayorista. 
