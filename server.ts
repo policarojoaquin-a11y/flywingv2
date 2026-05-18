@@ -108,6 +108,20 @@ export async function setupServer(app: express.Express) {
         appType: "spa",
       });
       app.use(vite.middlewares);
+
+      // SPA Fallback for development
+      app.use("*", async (req, res, next) => {
+        const url = req.originalUrl;
+        try {
+          let template = fs.readFileSync(path.resolve(process.cwd(), "index.html"), "utf-8");
+          template = await vite.transformIndexHtml(url, template);
+          res.status(200).set({ "Content-Type": "text/html" }).end(template);
+        } catch (e) {
+          vite.ssrFixStacktrace(e as Error);
+          next(e);
+        }
+      });
+
       console.log("Vite middleware initialized.");
     } catch (viteError) {
       console.error("Failed to initialize Vite middleware:", viteError);

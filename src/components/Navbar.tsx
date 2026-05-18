@@ -21,8 +21,10 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Inicio", href: "/" },
+    { name: "Pre-venta", href: "/preventa" },
+    { name: "Ofertas", href: "/ofertas" },
     { 
-      name: "Productos", 
+      name: "Catálogo", 
       href: "/catalogo",
       dropdown: [
         { name: "Todos los productos", filter: "" },
@@ -45,17 +47,17 @@ export default function Navbar() {
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link id="navbar-logo-link" to="/" className="flex items-center gap-2 group">
           <img 
-            src="logo.png" 
+            src="/logo.png" 
             alt="Flywing Logo" 
-            className="h-10 w-auto" 
+            className="h-14 w-auto" 
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.style.display = 'none';
-              const billboard = target.nextElementSibling as HTMLElement;
-              if (billboard) billboard.style.display = 'block';
+              const billboard = target.parentElement?.querySelector('.billboard') as HTMLElement;
+              if (billboard) billboard.classList.remove('hidden');
             }} 
           />
-          <span className="hidden billboard font-anton text-2xl text-primary tracking-tighter">FLYWING</span>
+          <span className="hidden billboard font-gotham text-3xl text-primary tracking-tighter">FLYWING</span>
         </Link>
 
         {/* Desktop Nav */}
@@ -121,7 +123,7 @@ export default function Navbar() {
                   <div key={link.name} className="flex flex-col gap-2">
                     <Link
                       to={link.href}
-                      className={`text-2xl font-anton transition-colors ${
+                      className={`text-2xl font-gotham font-bold transition-colors ${
                         location.pathname === link.href ? "text-primary" : "text-neutral-gray hover:text-primary"
                       }`}
                     >

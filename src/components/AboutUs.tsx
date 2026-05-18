@@ -21,7 +21,7 @@ export default function AboutUs() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-5xl md:text-6xl mb-8">SOMOS <span className="text-primary">FLYWING</span></h2>
+            <h2 className="text-5xl md:text-6xl mb-8 font-gotham font-extrabold">SOMOS <span className="text-primary">FLYWING</span></h2>
             <div className="space-y-6 text-lg text-neutral-gray font-montserrat leading-relaxed">
               <p>
                 Con más de 10 años en el mercado del calzado, nos especializamos en brindar 

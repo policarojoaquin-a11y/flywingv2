@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { useSearchParams } from "react-router-dom";
+import AddToCartDialog from "./AddToCartDialog";
 
 import { useCart } from "@/src/lib/store";
 import { trackEvent } from "@/src/lib/tracking";
@@ -148,7 +149,7 @@ const ImageSlider = ({ images, productName }: { images: any[], productName: stri
           >
             <div className="flex flex-col items-center gap-2">
               <Loader2 className="animate-spin text-primary" size={32} />
-              <span className="text-[8px] uppercase tracking-[0.2em] font-anton text-primary/60">Cargando</span>
+              <span className="text-[8px] uppercase tracking-[0.2em] font-gotham font-bold text-primary/60">Cargando</span>
             </div>
           </motion.div>
         )}
@@ -243,7 +244,7 @@ export default function Catalog() {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-12 gap-6">
           <div>
-            <h2 className="text-4xl md:text-6xl mb-4 font-anton tracking-tight text-neutral-900 leading-[0.9]">NUESTRO <span className="text-primary">CATÁLOGO</span></h2>
+            <h2 className="text-4xl md:text-6xl mb-4 font-gotham font-extrabold tracking-tight text-neutral-900 leading-[0.9]">NUESTRO <span className="text-primary">CATÁLOGO</span></h2>
             <p className="text-neutral-gray max-w-md font-poppins text-sm md:text-base">
               Explorá nuestra colección exclusiva para mayoristas directamente desde nuestra base de datos.
             </p>
@@ -295,14 +296,14 @@ export default function Catalog() {
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-neutral-50 mb-6 text-neutral-300">
               <ShoppingBag size={40} strokeWidth={1} />
             </div>
-            <h3 className="text-2xl font-anton text-neutral-900 mb-4 tracking-wide uppercase">No encontramos modelos</h3>
+            <h3 className="text-2xl font-gotham font-bold text-neutral-900 mb-4 tracking-wide uppercase">No encontramos modelos</h3>
             <p className="text-neutral-gray font-poppins max-w-sm mx-auto">
               Probá ajustando los filtros o la búsqueda para encontrar lo que necesitás.
             </p>
             {(searchQuery || filter !== "TODOS") && (
               <Button 
                 variant="link" 
-                className="mt-6 text-primary font-anton uppercase tracking-widest text-xs"
+                className="mt-6 text-primary font-gotham font-bold uppercase tracking-widest text-xs"
                 onClick={() => { setSearchQuery(""); setFilter("TODOS"); }}
               >
                 Limpiar filtros
@@ -324,16 +325,26 @@ export default function Catalog() {
                 >
                   <Card className="group border-none shadow-sm md:shadow-lg hover:shadow-xl transition-shadow overflow-hidden bg-white h-full flex flex-col rounded-2xl md:rounded-3xl">
                     <CardHeader className="p-0 relative overflow-hidden">
-                      <div className="absolute top-2 left-2 md:top-4 md:left-4 z-10">
-                        <Badge className="bg-primary text-white font-poppins text-[8px] md:text-[10px] px-1.5 py-0 md:px-2.5 md:py-0.5 uppercase tracking-tighter">
+                      <div className="absolute top-2 left-2 md:top-4 md:left-4 z-10 flex flex-col gap-1.5 md:gap-2">
+                        <Badge className="bg-primary text-white font-poppins text-[8px] md:text-[10px] px-1.5 py-0 md:px-2.5 md:py-0.5 uppercase tracking-tighter w-fit">
                           {sneaker.category}
                         </Badge>
+                        {sneaker.is_offer && (
+                          <Badge className="bg-secondary text-white font-gotham font-bold text-[7px] md:text-[9px] px-1.5 py-0 md:px-2.5 md:py-0.5 uppercase tracking-widest shadow-lg w-fit">
+                            Liquidación
+                          </Badge>
+                        )}
+                        {sneaker.is_preventa && (
+                          <Badge className="bg-blue-600 text-white font-gotham font-bold text-[7px] md:text-[9px] px-1.5 py-0 md:px-2.5 md:py-0.5 uppercase tracking-widest shadow-lg w-fit">
+                            Pre-venta
+                          </Badge>
+                        )}
                       </div>
                       
                       <ImageSlider images={sneaker.imagenes_producto || []} productName={sneaker.name} />
                     </CardHeader>
                     <CardContent className="p-3 md:p-6 flex-grow">
-                      <CardTitle className="text-sm md:text-2xl mb-1 md:mb-2 font-anton uppercase tracking-wide group-hover:text-primary transition-colors line-clamp-1">
+                      <CardTitle className="text-sm md:text-2xl mb-1 md:mb-2 font-gotham font-bold uppercase tracking-wide group-hover:text-primary transition-colors line-clamp-1">
                         {sneaker.name}
                       </CardTitle>
                       <div className="space-y-1 md:space-y-2">
@@ -345,6 +356,23 @@ export default function Catalog() {
                           <span className="text-neutral-gray font-medium uppercase tracking-widest">Pack</span>
                           <span className="font-bold text-primary">{sneaker.pack_size ? `${sneaker.pack_size}p` : "S/D"}</span>
                         </div>
+                        
+                        {sneaker.is_offer && (
+                          <div className="pt-2 flex flex-col">
+                            <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mb-1 italic">Precio Especial</span>
+                            <div className="flex items-end gap-2">
+                              <span className="text-sm md:text-xl font-gotham font-extrabold text-primary">
+                                ${sneaker.discount_price?.toLocaleString() || "S/D"}
+                              </span>
+                              {sneaker.original_price && (
+                                <span className="text-[10px] md:text-xs text-neutral-300 line-through mb-1 font-montserrat">
+                                  ${sneaker.original_price.toLocaleString()}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                        
                         <div className="pt-1 md:pt-2 hidden md:block">
                           <span className="text-[10px] text-neutral-gray uppercase tracking-widest block mb-1.5 font-semibold">Colores</span>
                           <div className="flex flex-wrap gap-1">
@@ -370,13 +398,13 @@ export default function Catalog() {
 
         <div className="mt-8 md:mt-16 bg-primary text-white rounded-[2rem] md:rounded-3xl p-6 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
           <div className="max-w-xl text-center md:text-left">
-            <h3 className="text-2xl md:text-4xl mb-3 md:mb-4 font-anton tracking-tight">¿BUSCÁS UN MODELO ESPECÍFICO?</h3>
+            <h3 className="text-2xl md:text-4xl mb-3 md:mb-4 font-gotham font-bold tracking-tight">¿BUSCÁS UN MODELO ESPECÍFICO?</h3>
             <p className="font-poppins opacity-90 leading-relaxed text-sm md:text-base">
               Si no encontrás lo que buscás en nuestro catálogo, contactanos. 
               Trabajamos con pedidos personalizados para grandes volúmenes.
             </p>
           </div>
-          <Button variant="secondary" className="w-full md:w-auto h-12 md:h-14 px-8 md:px-10 rounded-full text-primary font-anton tracking-widest text-base md:text-lg hover:bg-white transition-all shadow-lg hover:shadow-xl active:scale-95">
+          <Button variant="secondary" className="w-full md:w-auto h-12 md:h-14 px-8 md:px-10 rounded-full text-primary font-gotham font-bold tracking-widest text-base md:text-lg hover:bg-white transition-all shadow-lg hover:shadow-xl active:scale-95">
             HABLAR CON UN ASESOR
           </Button>
         </div>
@@ -385,132 +413,4 @@ export default function Catalog() {
   );
 }
 
-function AddToCartDialog({ sneaker, isCompact = false }: { sneaker: Sneaker, isCompact?: boolean }) {
-  const [selectedColor, setSelectedColor] = useState(sneaker.colors?.[0] || "");
-  const [packs, setPacks] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
-  const { addItem } = useCart();
 
-  // Find image for selected color
-  const colorImage = sneaker.imagenes_producto?.find(img => img.color_variante === selectedColor)?.url 
-    || sneaker.imagenes_producto?.[0]?.url;
-
-  const handleAdd = () => {
-    addItem({
-      id: sneaker.id,
-      name: sneaker.name,
-      color: selectedColor,
-      packs: packs,
-      pack_size: sneaker.pack_size,
-      category: sneaker.category,
-      imageUrl: colorImage
-    });
-    
-    // Tracking Meta Pixel
-    trackEvent("AddToCart", {
-      content_name: sneaker.name,
-      content_category: sneaker.category,
-      content_ids: [sneaker.id],
-      content_type: "product",
-      value: 0, // Optionally add price if available
-      currency: "ARS"
-    });
-    
-    setIsOpen(false);
-    setPacks(1);
-  };
-
-  return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger
-        render={
-          <Button className={`w-full bg-primary hover:bg-primary/90 text-white rounded-full font-anton tracking-widest flex items-center justify-center gap-2 ${isCompact ? 'h-10 text-xs md:h-12 md:text-base' : 'h-14 text-lg'}`}>
-            <ShoppingBag size={isCompact ? 14 : 18} />
-            {isCompact ? 'COMPRAR' : 'COMPRAR AHORA'}
-          </Button>
-        }
-      />
-      <DialogContent className="sm:max-w-[425px] rounded-[2rem]">
-        <DialogHeader>
-          <DialogTitle className="text-xl md:text-2xl font-anton tracking-widest text-neutral-900">
-            PERSONALIZAR <span className="text-primary">PEDIDO</span>
-          </DialogTitle>
-        </DialogHeader>
-        
-        <div className="py-4 md:py-8 space-y-6 md:space-y-8">
-          <div className="flex gap-4 items-center p-3 md:p-5 bg-neutral-50 rounded-2xl border border-neutral-100">
-            <div className="w-16 h-16 rounded-xl bg-white overflow-hidden border border-neutral-200">
-              {colorImage && (
-                <img 
-                  src={getOptimizedImageUrl(colorImage, { width: 200, quality: 70 })} 
-                  alt={sneaker.name} 
-                  className="w-full h-full object-cover transition-all duration-300"
-                  decoding="async"
-                />
-              )}
-            </div>
-            <div>
-              <h4 className="font-anton text-xl uppercase leading-none mb-1 tracking-wide">{sneaker.name}</h4>
-              <p className="text-[10px] text-neutral-500 uppercase tracking-widest">{sneaker.category} • {sneaker.pack_size} pares x pack</p>
-            </div>
-          </div>
-
-          <div className="space-y-3 md:space-y-4">
-            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">Elegir Color</label>
-            <div className="flex flex-wrap gap-1.5 md:gap-2">
-              {sneaker.colors?.map(color => (
-                <button
-                  key={color}
-                  onClick={() => setSelectedColor(color)}
-                  className={`px-4 py-2 rounded-full border text-xs font-medium transition-all ${
-                    selectedColor === color 
-                    ? "bg-primary text-white border-primary shadow-md scale-105" 
-                    : "bg-white text-neutral-600 border-neutral-200 hover:border-primary"
-                  }`}
-                >
-                  {color}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-3 md:space-y-4">
-            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">Cantidad de Packs</label>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6">
-              <div className="flex items-center border border-neutral-200 rounded-full h-10 md:h-12 overflow-hidden bg-white">
-                <button 
-                  className="px-3 md:px-4 h-full hover:bg-neutral-50 border-r border-neutral-200 transition-colors"
-                  onClick={() => setPacks(Math.max(1, packs - 1))}
-                >
-                  <Minus size={14} />
-                </button>
-                <div className="px-4 md:px-6 text-base md:text-lg font-bold min-w-[50px] md:min-w-[60px] text-center">
-                  {packs}
-                </div>
-                <button 
-                  className="px-3 md:px-4 h-full hover:bg-neutral-50 border-l border-neutral-200 transition-colors"
-                  onClick={() => setPacks(packs + 1)}
-                >
-                  <Plus size={14} />
-                </button>
-              </div>
-              <div className="text-sm">
-                <p className="font-bold text-neutral-900">{packs * sneaker.pack_size} Pares en total</p>
-                <p className="text-[10px] text-neutral-400 uppercase tracking-widest">Mínimo 1 pack</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <DialogFooter className="sm:justify-start pt-4 border-t border-neutral-100">
-          <Button 
-            className="w-full bg-primary hover:bg-primary/90 text-white rounded-full h-12 md:h-16 font-anton tracking-widest text-base md:text-xl"
-            onClick={handleAdd}
-          >
-            AGREGAR AL CARRITO
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}

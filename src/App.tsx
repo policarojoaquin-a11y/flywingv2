@@ -12,8 +12,19 @@ import AboutUs from "./components/AboutUs";
 import ContactForm from "./components/ContactForm";
 import Admin from "./components/Admin";
 import Footer from "./components/Footer";
+import OfertasSection from "./components/OfertasSection";
+import PreVentaSection from "./components/PreVentaSection";
+import PromotionSections from "./components/PromotionSections";
 import { MessageCircle } from "lucide-react";
 import { trackPageView, trackEvent } from "./lib/tracking";
+
+function HomePage() {
+  return (
+    <>
+      <Hero />
+    </>
+  );
+}
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -35,8 +46,10 @@ export default function App() {
         <Navbar />
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<Hero />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/catalogo" element={<Catalog />} />
+            <Route path="/ofertas" element={<OfertasSection />} />
+            <Route path="/preventa" element={<PreVentaSection />} />
             <Route path="/nosotros" element={<AboutUs />} />
             <Route path="/contacto" element={<ContactForm />} />
             <Route path="/admin" element={<Admin />} />

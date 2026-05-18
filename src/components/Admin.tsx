@@ -30,7 +30,12 @@ export default function Admin() {
     category: "CASUAL",
     sizes: "35 al 40",
     pack_size: 6,
-    colors: ""
+    colors: "",
+    is_offer: false,
+    is_preventa: false,
+    original_price: "",
+    discount_price: "",
+    discount_percentage: ""
   });
 
   useEffect(() => {
@@ -129,7 +134,12 @@ export default function Admin() {
           category: newProduct.category,
           sizes: newProduct.sizes,
           pack_size: newProduct.pack_size,
-          colors: newProduct.colors.split(',').map(c => c.trim()).filter(c => c !== "")
+          colors: newProduct.colors.split(',').map(c => c.trim()).filter(c => c !== ""),
+          is_offer: newProduct.is_offer,
+          is_preventa: newProduct.is_preventa,
+          original_price: newProduct.original_price ? parseFloat(newProduct.original_price as string) : null,
+          discount_price: newProduct.discount_price ? parseFloat(newProduct.discount_price as string) : null,
+          discount_percentage: newProduct.discount_percentage ? parseFloat(newProduct.discount_percentage as string) : null
         }
       ])
       .select();
@@ -151,7 +161,18 @@ export default function Admin() {
       setUploading(null);
     }
 
-    setNewProduct({ name: "", category: "CASUAL", sizes: "35 al 40", pack_size: 6, colors: "" });
+    setNewProduct({ 
+      name: "", 
+      category: "CASUAL", 
+      sizes: "35 al 40", 
+      pack_size: 6, 
+      colors: "",
+      is_offer: false,
+      is_preventa: false,
+      original_price: "",
+      discount_price: "",
+      discount_percentage: ""
+    });
     setSelectedFiles(null);
     setIsAddingProduct(false);
     loadData();
@@ -170,7 +191,12 @@ export default function Admin() {
         category: editingProduct.category,
         sizes: editingProduct.sizes,
         pack_size: editingProduct.pack_size,
-        colors: Array.isArray(editingProduct.colors) ? editingProduct.colors : (editingProduct.colors as string).split(',').map(c => c.trim()).filter(c => c !== "")
+        colors: Array.isArray(editingProduct.colors) ? editingProduct.colors : (editingProduct.colors as string).split(',').map(c => c.trim()).filter(c => c !== ""),
+        is_offer: editingProduct.is_offer,
+        is_preventa: editingProduct.is_preventa,
+        original_price: editingProduct.original_price || null,
+        discount_price: editingProduct.discount_price || null,
+        discount_percentage: editingProduct.discount_percentage || null
       })
       .eq('id', editingProduct.id);
 
@@ -215,7 +241,7 @@ export default function Admin() {
       <div className="min-h-screen pt-32 pb-12 flex items-center justify-center bg-neutral-50 px-4">
         <Card className="w-full max-w-md border-none shadow-2xl rounded-3xl overflow-hidden">
           <CardHeader className="bg-primary text-white p-8 text-center">
-            <CardTitle className="text-3xl font-anton tracking-widest">FLYWING <span className="text-white/80"></span> ADMIN</CardTitle>
+            <CardTitle className="text-3xl font-gotham font-bold tracking-widest">FLYWING <span className="text-white/80"></span> ADMIN</CardTitle>
             <p className="text-white/70 text-xs uppercase tracking-tighter mt-2 font-poppins">Ingreso exclusivo para administradores</p>
           </CardHeader>
           <CardContent className="p-8">
@@ -251,7 +277,7 @@ export default function Admin() {
               </div>
               <Button 
                 type="submit" 
-                className="w-full bg-primary hover:bg-primary/90 h-14 rounded-xl font-anton tracking-widest text-lg"
+                className="w-full bg-primary hover:bg-primary/90 h-14 rounded-xl font-gotham font-bold tracking-widest text-lg"
                 disabled={loading}
               >
                 {loading ? <Loader2 className="animate-spin" /> : "ENTRAR AL PANEL"}
@@ -268,13 +294,13 @@ export default function Admin() {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-6">
           <div>
-            <h2 className="text-5xl font-anton tracking-tight text-neutral-900 leading-none">PANEL DE <span className="text-primary">CONTROL</span></h2>
+            <h2 className="text-5xl font-gotham font-bold tracking-tight text-neutral-900 leading-none">PANEL DE <span className="text-primary">CONTROL</span></h2>
             <p className="text-neutral-gray mt-2 font-poppins">Gestioná el stock y las imágenes de tus productos.</p>
           </div>
           <div className="flex flex-wrap items-center gap-4">
             <Button 
               onClick={() => setIsAddingProduct(!isAddingProduct)}
-              className="rounded-full bg-primary hover:bg-primary/90 px-6 gap-2 font-anton tracking-widest text-xs h-12 shadow-lg"
+              className="rounded-full bg-primary hover:bg-primary/90 px-6 gap-2 font-gotham font-bold tracking-widest text-xs h-12 shadow-lg"
             >
               {isAddingProduct ? "CANCELAR" : "+ NUEVO PRODUCTO"}
             </Button>
@@ -289,7 +315,7 @@ export default function Admin() {
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               </div>
             </div>
-            <Button variant="outline" onClick={handleLogout} className="rounded-full border-neutral-200 hover:bg-neutral-100 px-6 gap-2 font-anton tracking-widest text-xs h-12">
+            <Button variant="outline" onClick={handleLogout} className="rounded-full border-neutral-200 hover:bg-neutral-100 px-6 gap-2 font-gotham font-bold tracking-widest text-xs h-12">
               <LogOut size={16} /> CERRAR SESIÓN
             </Button>
           </div>
@@ -298,7 +324,7 @@ export default function Admin() {
         {isAddingProduct && (
           <Card className="mb-12 border-none shadow-2xl rounded-3xl overflow-hidden bg-white border-2 border-primary/20">
             <CardHeader className="bg-primary text-white p-6">
-              <CardTitle className="text-2xl font-anton tracking-widest flex justify-between items-center">
+              <CardTitle className="text-2xl font-gotham font-extrabold tracking-widest flex justify-between items-center">
                 <span>CARGAR NUEVO MODELO</span>
                 {loading && <Loader2 className="animate-spin" />}
               </CardTitle>
@@ -319,7 +345,7 @@ export default function Admin() {
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Categoría</label>
                     <select 
-                      className="w-full h-12 rounded-xl border border-neutral-200 px-3 bg-white font-poppins text-sm outline-none focus:border-primary"
+                      className={`w-full h-12 rounded-xl border px-3 bg-white font-poppins text-sm outline-none transition-colors ${newProduct.category === 'preventa' ? 'border-secondary bg-secondary/5' : 'border-neutral-200 focus:border-primary'}`}
                       value={newProduct.category}
                       onChange={e => setNewProduct({...newProduct, category: e.target.value})}
                     >
@@ -344,6 +370,56 @@ export default function Admin() {
                       type="number"
                       value={newProduct.pack_size} 
                       onChange={e => setNewProduct({...newProduct, pack_size: parseInt(e.target.value)})} 
+                      className="rounded-xl border-neutral-200 h-12"
+                    />
+                  </div>
+                  <div className="space-y-4 flex flex-col justify-center">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input 
+                        type="checkbox"
+                        checked={newProduct.is_offer}
+                        onChange={e => setNewProduct({...newProduct, is_offer: e.target.checked})}
+                        className="w-4 h-4 accent-primary"
+                      />
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">¿Está en Oferta?</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input 
+                        type="checkbox"
+                        checked={newProduct.is_preventa}
+                        onChange={e => setNewProduct({...newProduct, is_preventa: e.target.checked})}
+                        className="w-4 h-4 accent-secondary"
+                      />
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">¿Es Pre-venta?</span>
+                    </label>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Precio Original</label>
+                    <Input 
+                      type="number"
+                      value={newProduct.original_price} 
+                      onChange={e => setNewProduct({...newProduct, original_price: e.target.value})} 
+                      placeholder="Ej: 45000"
+                      className="rounded-xl border-neutral-200 h-12"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Precio Oferta</label>
+                    <Input 
+                      type="number"
+                      value={newProduct.discount_price} 
+                      onChange={e => setNewProduct({...newProduct, discount_price: e.target.value})} 
+                      placeholder="Ej: 38000"
+                      className="rounded-xl border-neutral-200 h-12"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">% Descuento</label>
+                    <Input 
+                      type="number"
+                      value={newProduct.discount_percentage} 
+                      onChange={e => setNewProduct({...newProduct, discount_percentage: e.target.value})} 
+                      placeholder="Ej: 15"
                       className="rounded-xl border-neutral-200 h-12"
                     />
                   </div>
@@ -383,13 +459,13 @@ export default function Admin() {
                     type="button"
                     variant="ghost"
                     onClick={() => setIsAddingProduct(false)}
-                    className="rounded-xl h-12 px-8 font-anton tracking-widest uppercase text-xs"
+                    className="rounded-xl h-12 px-8 font-gotham font-bold tracking-widest uppercase text-xs"
                   >
                     Descartar
                   </Button>
                   <Button 
                     type="submit" 
-                    className="bg-primary hover:bg-primary/90 h-12 rounded-xl font-anton tracking-widest px-12"
+                    className="bg-primary hover:bg-primary/90 h-12 rounded-xl font-gotham font-bold tracking-widest px-12"
                     disabled={loading}
                   >
                     {loading ? (
@@ -430,8 +506,13 @@ export default function Admin() {
                 {/* Product Info */}
                 <div className="p-8 md:w-1/4 border-b md:border-b-0 md:border-r border-neutral-100 bg-neutral-50/30 flex flex-col justify-between">
                   <div>
-                    <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-3 block">{sneaker.category}</span>
-                    <h3 className="text-4xl font-anton text-neutral-900 leading-tight mb-6">{sneaker.name}</h3>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">{sneaker.category}</span>
+                      {sneaker.is_preventa && (
+                        <span className="text-[10px] font-bold bg-secondary text-white px-3 py-1 rounded-full tracking-widest uppercase shadow-sm">Pre-venta</span>
+                      )}
+                    </div>
+                    <h3 className="text-4xl font-gotham font-extrabold text-neutral-900 leading-tight mb-6">{sneaker.name}</h3>
                     
                     <div className="space-y-4">
                       <div className="flex flex-col gap-1">
@@ -442,6 +523,16 @@ export default function Admin() {
                         <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Pack por Mayor</span>
                         <span className="font-poppins text-sm font-semibold">{sneaker.pack_size} pares</span>
                       </div>
+                      {sneaker.is_offer && (
+                        <div className="flex flex-col gap-1 bg-primary/5 p-3 rounded-xl border border-primary/20">
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Estado: EN OFERTA</span>
+                          <div className="mt-1">
+                            {sneaker.original_price && <p className="text-[10px] line-through text-neutral-400">${sneaker.original_price}</p>}
+                            <p className="text-sm font-bold text-primary">${sneaker.discount_price || "S/D"}</p>
+                            {sneaker.discount_percentage && <span className="text-[10px] bg-primary text-white px-1.5 py-0.5 rounded-full ml-auto">-{sneaker.discount_percentage}%</span>}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                   
@@ -472,7 +563,7 @@ export default function Admin() {
                       <ImageIcon size={18} className="text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-anton tracking-widest text-lg uppercase leading-none">Galería de Fotos</h4>
+                      <h4 className="font-gotham font-bold tracking-widest text-lg uppercase leading-none">Galería de Fotos</h4>
                       <p className="text-[10px] text-neutral-400 font-poppins mt-1">Imágenes que verán tus clientes</p>
                     </div>
                   </div>
@@ -521,7 +612,7 @@ export default function Admin() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <Card className="w-full max-w-2xl border-none shadow-2xl rounded-3xl overflow-hidden bg-white">
             <CardHeader className="bg-neutral-900 text-white p-6">
-              <CardTitle className="text-2xl font-anton tracking-widest flex justify-between items-center">
+              <CardTitle className="text-2xl font-gotham font-extrabold tracking-widest flex justify-between items-center">
                 <span>EDITAR PRODUCTO</span>
                 <button onClick={() => setEditingProduct(null)} className="text-white/50 hover:text-white transition-colors">
                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -543,7 +634,7 @@ export default function Admin() {
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Categoría</label>
                     <select 
-                      className="w-full h-12 rounded-xl border border-neutral-200 px-3 bg-white font-poppins text-sm outline-none"
+                      className={`w-full h-12 rounded-xl border px-3 bg-white font-poppins text-sm outline-none transition-colors ${editingProduct.category === 'preventa' ? 'border-secondary bg-secondary/5' : 'border-neutral-200 focus:border-primary'}`}
                       value={editingProduct.category}
                       onChange={e => setEditingProduct({...editingProduct, category: e.target.value})}
                     >
@@ -570,6 +661,53 @@ export default function Admin() {
                       className="rounded-xl border-neutral-200 h-12"
                     />
                   </div>
+                  <div className="space-y-4 flex flex-col justify-center">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input 
+                        type="checkbox"
+                        checked={editingProduct.is_offer}
+                        onChange={e => setEditingProduct({...editingProduct, is_offer: e.target.checked})}
+                        className="w-4 h-4 accent-primary"
+                      />
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">¿Está en Oferta?</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input 
+                        type="checkbox"
+                        checked={editingProduct.is_preventa}
+                        onChange={e => setEditingProduct({...editingProduct, is_preventa: e.target.checked})}
+                        className="w-4 h-4 accent-secondary"
+                      />
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">¿Es Pre-venta?</span>
+                    </label>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Precio Original</label>
+                    <Input 
+                      type="number"
+                      value={editingProduct.original_price || ""} 
+                      onChange={e => setEditingProduct({...editingProduct, original_price: e.target.value === "" ? undefined : parseFloat(e.target.value)})} 
+                      className="rounded-xl border-neutral-200 h-12"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Precio Oferta</label>
+                    <Input 
+                      type="number"
+                      value={editingProduct.discount_price || ""} 
+                      onChange={e => setEditingProduct({...editingProduct, discount_price: e.target.value === "" ? undefined : parseFloat(e.target.value)})} 
+                      className="rounded-xl border-neutral-200 h-12"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">% Descuento</label>
+                    <Input 
+                      type="number"
+                      value={editingProduct.discount_percentage || ""} 
+                      onChange={e => setEditingProduct({...editingProduct, discount_percentage: e.target.value === "" ? undefined : parseFloat(e.target.value)})} 
+                      className="rounded-xl border-neutral-200 h-12"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Colores (separados por coma)</label>
@@ -584,13 +722,13 @@ export default function Admin() {
                     type="button"
                     variant="outline"
                     onClick={() => setEditingProduct(null)}
-                    className="rounded-xl h-12 px-8 font-anton tracking-widest"
+                    className="rounded-xl h-12 px-8 font-gotham font-bold tracking-widest"
                   >
                     CANCELAR
                   </Button>
                   <Button 
                     type="submit" 
-                    className="bg-primary hover:bg-primary/90 h-12 rounded-xl font-anton tracking-widest px-12"
+                    className="bg-primary hover:bg-primary/90 h-12 rounded-xl font-gotham font-bold tracking-widest px-12"
                     disabled={loading}
                   >
                     {loading ? <Loader2 className="animate-spin" /> : "ACTUALIZAR CAMBIOS"}
@@ -616,7 +754,7 @@ export default function Admin() {
         <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
           <Card className="w-full max-w-sm border-none shadow-2xl rounded-3xl overflow-hidden bg-white animate-in zoom-in-95 duration-200">
              <CardHeader className="bg-red-500 text-white p-6 pb-4">
-                <CardTitle className="text-xl font-anton tracking-widest uppercase">{confirmDialog.title}</CardTitle>
+                <CardTitle className="text-xl font-gotham font-bold tracking-widest uppercase">{confirmDialog.title}</CardTitle>
              </CardHeader>
              <CardContent className="p-8">
                 <p className="text-neutral-600 font-poppins text-sm mb-8 leading-relaxed">
@@ -626,14 +764,14 @@ export default function Admin() {
                    <Button 
                     variant="outline" 
                     onClick={() => setConfirmDialog({...confirmDialog, isOpen: false})}
-                    className="flex-1 rounded-xl h-12 border-neutral-200 font-anton tracking-widest text-xs"
+                    className="flex-1 rounded-xl h-12 border-neutral-200 font-gotham font-bold tracking-widest text-xs"
                    >
                      CANCELAR
                    </Button>
                    <Button 
                     variant="destructive"
                     onClick={confirmDialog.onConfirm}
-                    className="flex-1 rounded-xl h-12 bg-red-600 hover:bg-red-700 font-anton tracking-widest text-xs shadow-lg text-white"
+                    className="flex-1 rounded-xl h-12 bg-red-600 hover:bg-red-700 font-gotham font-bold tracking-widest text-xs shadow-lg text-white"
                     disabled={loading}
                    >
                      {loading ? <Loader2 className="animate-spin text-white" /> : "ELIMINAR"}

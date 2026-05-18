@@ -9,17 +9,17 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <Link id="footer-logo-link" to="/" className="flex items-center gap-2 mb-6 group">
               <img 
-                src="logo.png" 
+                src="/logo.png" 
                 alt="Flywing Logo" 
-                className="h-10 w-auto brightness-0 invert" 
+                className="h-14 w-auto brightness-0 invert" 
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
-                  const billboard = target.nextElementSibling as HTMLElement;
-                  if (billboard) billboard.style.display = 'block';
+                  const billboard = target.parentElement?.querySelector('.billboard') as HTMLElement;
+                  if (billboard) billboard.classList.remove('hidden');
                 }}
               />
-              <span className="hidden billboard font-anton text-2xl text-white tracking-tighter">FLYWING</span>
+              <span className="hidden billboard font-gotham text-3xl text-white tracking-tighter">FLYWING</span>
             </Link>
             <p className="text-neutral-400 font-poppins max-w-sm mb-8">
               Tu socio estratégico en calzado mayorista. 
@@ -44,8 +44,8 @@ export default function Footer() {
           </div>
 
           <div className="col-span-1 md:col-span-2">
-            <h4 className="font-anton text-xl mb-6 tracking-widest text-center md:text-left">NAVEGACIÓN</h4>
-            <ul className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4 font-poppins text-sm text-neutral-400 uppercase tracking-tighter text-center">
+            <h4 className="font-gotham font-bold text-xl mb-6 tracking-widest text-center md:text-left">NAVEGACIÓN</h4>
+            <ul className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4 font-montserrat text-sm text-neutral-400 uppercase tracking-tighter text-center">
               <li><Link to="/" className="hover:text-primary transition-colors">Inicio</Link></li>
               <li><Link to="/catalogo" className="hover:text-primary transition-colors">Productos</Link></li>
               <li><Link to="/nosotros" className="hover:text-primary transition-colors">Nosotros</Link></li>

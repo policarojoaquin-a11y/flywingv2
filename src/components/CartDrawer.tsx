@@ -58,7 +58,7 @@ export function CartDrawer() {
       />
       <SheetContent className="w-full sm:max-w-md flex flex-col p-0">
         <SheetHeader className="p-6 pb-2">
-          <SheetTitle className="text-2xl font-anton tracking-widest flex items-center gap-2">
+          <SheetTitle className="text-2xl font-gotham font-extrabold tracking-widest flex items-center gap-2">
             MI PEDIDO <span className="text-primary">({itemCount})</span>
           </SheetTitle>
         </SheetHeader>
@@ -103,7 +103,7 @@ export function CartDrawer() {
                     <div className="flex-grow py-1">
                       <div className="flex justify-between items-start mb-1">
                         <div>
-                          <h4 className="font-anton text-lg uppercase leading-none group-hover:text-primary transition-colors tracking-wide">
+                          <h4 className="font-gotham font-bold text-lg uppercase leading-none group-hover:text-primary transition-colors tracking-wide">
                             {item.name}
                           </h4>
                           <p className="text-[10px] text-neutral-500 uppercase tracking-widest">
@@ -156,12 +156,12 @@ export function CartDrawer() {
           <SheetFooter className="p-6 border-t border-neutral-100 flex flex-col gap-3">
             <div className="flex justify-between items-center w-full mb-2">
               <span className="text-xs text-neutral-400 uppercase tracking-widest font-medium">Total Estimado</span>
-              <span className="text-xl font-anton text-neutral-900">
+              <span className="text-xl font-gotham font-bold text-neutral-900">
                 {items.reduce((acc, item) => acc + (item.packs * item.pack_size), 0)} PARES
               </span>
             </div>
             <Button 
-                className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white rounded-full h-14 font-anton tracking-widest text-lg flex items-center justify-center gap-2"
+                className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white rounded-full h-14 font-gotham font-bold tracking-widest text-lg flex items-center justify-center gap-2"
                 onClick={handleContact}
             >
               <MessageSquare size={20} />

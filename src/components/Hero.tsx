@@ -48,7 +48,7 @@ export default function Hero() {
               <Package size={14} />
               Venta Exclusiva Mayorista
             </div>
-            <h1 className="text-5xl md:text-8xl font-anton leading-[0.9] text-neutral-900 mb-6">
+            <h1 className="text-5xl md:text-8xl font-gotham font-extrabold leading-[0.9] text-neutral-900 mb-6">
               IMPULSÁ TU <span className="text-primary">NEGOCIO</span> CON FLYWING
             </h1>
             <p className="text-base md:text-lg text-neutral-gray font-montserrat max-w-lg mb-8 leading-relaxed">
@@ -74,21 +74,21 @@ export default function Hero() {
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 text-primary">
                   <Truck size={18} />
-                  <span className="font-anton text-lg md:text-xl">ENVÍOS</span>
+                  <span className="font-gotham font-bold text-lg md:text-xl">ENVÍOS</span>
                 </div>
                 <span className="text-[10px] md:text-xs text-neutral-gray font-poppins uppercase">A todo el país</span>
               </div>
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 text-primary">
                   <Package size={18} />
-                  <span className="font-anton text-lg md:text-xl">PACKS</span>
+                  <span className="font-gotham font-bold text-lg md:text-xl">PACKS</span>
                 </div>
                 <span className="text-[10px] md:text-xs text-neutral-gray font-poppins uppercase">Por talle/modelo</span>
               </div>
               <div className="flex flex-col gap-1 col-span-2 md:col-span-1 border-t border-neutral-100 pt-4 md:border-none md:pt-0">
                 <div className="flex items-center gap-2 text-primary">
                   <ShieldCheck size={18} />
-                  <span className="font-anton text-lg md:text-xl">CALIDAD</span>
+                  <span className="font-gotham font-bold text-lg md:text-xl">CALIDAD</span>
                 </div>
                 <span className="text-[10px] md:text-xs text-neutral-gray font-poppins uppercase">Garantizada</span>
               </div>
@@ -113,7 +113,7 @@ export default function Hero() {
                   >
                     <Loader2 className="animate-spin text-primary" size={40} />
                     <div>
-                      <p className="font-anton text-xl text-neutral-800 uppercase tracking-tighter">Cargando catálogo...</p>
+                      <p className="font-gotham font-bold text-xl text-neutral-800 uppercase tracking-tighter">Cargando catálogo...</p>
                       <p className="text-[10px] uppercase tracking-widest font-medium text-neutral-500">Preparando exclusivas</p>
                     </div>
                   </motion.div>
@@ -161,7 +161,7 @@ export default function Hero() {
                         <span className="inline-block px-3 py-1 bg-primary text-white text-[10px] font-bold tracking-widest uppercase mb-2 rounded-full">
                           {featuredSneakers[currentIndex].category || "Novedad"}
                         </span>
-                        <h3 className="text-white font-anton text-2xl md:text-4xl uppercase leading-none">
+                        <h3 className="text-white font-gotham font-bold text-2xl md:text-4xl uppercase leading-none">
                           {featuredSneakers[currentIndex].name}
                         </h3>
                       </motion.div>
@@ -170,7 +170,7 @@ export default function Hero() {
                 ) : (
                   <div className="flex flex-col items-center gap-4">
                     <Package size={64} strokeWidth={1} className="mb-4" />
-                    <p className="font-anton text-2xl uppercase tracking-tighter">Espacio para Foto del Local</p>
+                    <p className="font-gotham font-bold text-2xl uppercase tracking-tighter">Espacio para Foto del Local</p>
                     <p className="text-[10px] uppercase tracking-widest font-medium">Próximamente</p>
                   </div>
                 )}
