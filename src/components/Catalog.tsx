@@ -74,7 +74,7 @@ const ColorSwatch = (props: { colorName: string; [key: string]: any }) => {
   );
 };
 
-const ImageSlider = ({ images, productName }: { images: any[], productName: string }) => {
+export const ImageSlider = ({ images, productName, className = "h-40 md:h-72" }: { images: any[], productName: string, className?: string }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [showLoader, setShowLoader] = useState(true);
@@ -129,7 +129,7 @@ const ImageSlider = ({ images, productName }: { images: any[], productName: stri
 
   if (!images || images.length === 0) {
     return (
-      <div className="w-full h-40 md:h-72 bg-neutral-100 flex flex-col items-center justify-center gap-2 text-neutral-400">
+      <div className={`w-full bg-neutral-100 flex flex-col items-center justify-center gap-2 text-neutral-400 ${className}`}>
         <ShoppingBag size={24} className="md:w-12 md:h-12" strokeWidth={1} />
         <span className="text-[8px] md:text-[10px] uppercase tracking-widest font-medium">Imagen en proceso</span>
       </div>
@@ -137,7 +137,7 @@ const ImageSlider = ({ images, productName }: { images: any[], productName: stri
   }
 
   return (
-    <div className="relative group/slider w-full h-40 md:h-72 overflow-hidden bg-white">
+    <div className={`relative group/slider w-full overflow-hidden bg-white ${className}`}>
       {/* Loading Overlay */}
       <AnimatePresence>
         {showLoader && (
@@ -245,8 +245,8 @@ export default function Catalog() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-12 gap-6">
           <div>
             <h2 className="text-4xl md:text-6xl mb-4 font-gotham font-extrabold tracking-tight text-neutral-900 leading-[0.9]">NUESTRO <span className="text-primary">CATÁLOGO</span></h2>
-            <p className="text-neutral-gray max-w-md font-poppins text-sm md:text-base">
-              Explorá nuestra colección exclusiva para mayoristas directamente desde nuestra base de datos.
+            <p className="text-neutral-gray max-w-xl font-poppins text-sm md:text-base">
+              Explora nuestra colección directamente desde nuestro stock. También podes seleccionar productos que se van a producir y ganar descuentos extra.
             </p>
           </div>
           <div className="flex flex-col gap-4 items-stretch md:items-end w-full md:w-auto">

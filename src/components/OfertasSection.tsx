@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { fetchSneakers } from "@/src/lib/supabase";
 import { Sneaker } from "@/src/types";
 import { motion } from "motion/react";
-import { Percent, ShoppingBag, Loader2 } from "lucide-react";
-import { getOptimizedImageUrl } from "@/lib/utils";
+import { Percent, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import AddToCartDialog from "./AddToCartDialog";
+import { ImageSlider } from "./Catalog";
 
 export default function OfertasSection() {
   const [offers, setOffers] = useState<Sneaker[]>([]);
@@ -23,40 +23,44 @@ export default function OfertasSection() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center pt-24">
-        <Loader2 className="animate-spin text-primary" size={48} />
+      <div className="h-[60vh] flex items-center justify-center">
+        <Loader2 className="animate-spin text-primary" size={32} />
       </div>
     );
   }
 
   return (
-    <section className="py-24 bg-neutral-50 min-h-screen pt-32">
+    <section className="py-12 md:py-20 bg-neutral-50">
       <div className="container mx-auto px-4">
-        <div className="mb-16">
-          <div className="flex items-center gap-2 text-primary mb-4">
-            <Percent size={24} />
-            <span className="font-gotham font-extrabold uppercase tracking-widest text-sm">Oportunidades únicas</span>
+        {/* Compact Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+          <div>
+            <div className="flex items-center gap-2 text-primary mb-3">
+              <Percent size={18} />
+              <span className="font-gotham font-extrabold uppercase tracking-[0.2em] text-[10px]">
+                Oportunidades únicas
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-6xl font-gotham font-extrabold leading-[0.9] mb-4">
+              HOT <br />
+              <span className="text-secondary">OFERTAS</span>
+            </h2>
+            <p className="text-neutral-500 max-w-sm font-montserrat text-sm leading-relaxed">
+              Precios de liquidación para maximizar tu rentabilidad. Stock limitado.
+            </p>
           </div>
-          <h2 className="text-5xl md:text-8xl font-gotham font-extrabold leading-[0.8] mb-6">
-            HOT <br />
-            <span className="text-secondary">OFERTAS</span>
-          </h2>
-          <p className="text-neutral-gray max-w-md font-montserrat">
-            Precios de liquidación para maximizar tu rentabilidad. Stock limitado.
-          </p>
         </div>
 
         {offers.length > 0 ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {offers.map((product) => (
               <ProductCardOffer key={product.id} product={product} />
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-[3rem] p-24 text-center border border-dashed border-neutral-300">
-            <Percent size={64} className="mx-auto text-neutral-200 mb-6" strokeWidth={1} />
-            <p className="font-gotham text-xl text-neutral-400 uppercase">No hay ofertas activas en este momento</p>
-            <p className="text-xs text-neutral-400 uppercase tracking-widest mt-2">¡Volvé pronto para ver novedades!</p>
+          <div className="bg-white rounded-[2rem] py-20 text-center border border-dashed border-neutral-200">
+            <Percent size={48} className="mx-auto text-neutral-200 mb-4" strokeWidth={1} />
+            <p className="font-gotham text-lg text-neutral-400 uppercase">No hay ofertas activas en este momento</p>
           </div>
         )}
       </div>
@@ -65,50 +69,41 @@ export default function OfertasSection() {
 }
 
 const ProductCardOffer: React.FC<{ product: Sneaker }> = ({ product }) => {
-  const mainImage = product.imagenes_producto?.[0]?.url;
-
   return (
     <motion.div 
-      whileHover={{ y: -10 }}
-      className="group bg-white rounded-[2rem] overflow-hidden shadow-lg border border-neutral-100 flex flex-col h-full"
+      whileHover={{ y: -5 }}
+      className="group bg-white rounded-[1.5rem] overflow-hidden border border-neutral-100 flex flex-col h-full hover:shadow-xl hover:shadow-primary/5 transition-all duration-300"
     >
-      <div className="aspect-[3/4] overflow-hidden relative">
-        {mainImage ? (
-          <img 
-            src={getOptimizedImageUrl(mainImage, { width: 400, quality: 75 })} 
-            alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            referrerPolicy="no-referrer"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-neutral-100 text-neutral-300">
-            <ShoppingBag size={48} strokeWidth={1} />
-          </div>
-        )}
-        <div className="absolute top-4 left-4 flex flex-col gap-2">
+      <div className="relative">
+        <ImageSlider 
+          images={product.imagenes_producto || []} 
+          productName={product.name} 
+          className="h-32 md:h-48"
+        />
+        <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1">
           {product.discount_percentage && (
-            <Badge className="bg-primary text-white font-gotham font-bold px-3 py-1 rounded-full text-[10px] tracking-widest">
+            <Badge className="bg-primary text-white border-none font-gotham font-bold px-2 py-0.5 rounded-full text-[8px] md:text-[9px] tracking-wider w-fit">
               -{product.discount_percentage}%
             </Badge>
           )}
-          <Badge className="bg-white text-primary border border-primary/20 font-gotham font-bold px-3 py-1 rounded-full text-[8px] tracking-widest uppercase shadow-sm">
+          <Badge className="bg-white text-primary border border-primary/20 font-gotham font-bold px-2 py-0.5 rounded-full text-[7px] md:text-[8px] tracking-wide uppercase shadow-sm w-fit">
             Oferta
           </Badge>
         </div>
       </div>
       
-      <div className="p-6 flex flex-col flex-grow">
-        <h3 className="font-gotham text-lg uppercase leading-tight mb-2 group-hover:text-primary transition-colors">
+      <div className="p-3 flex flex-col flex-grow">
+        <h3 className="font-gotham text-xs md:text-sm uppercase font-bold leading-tight mb-1 group-hover:text-primary transition-colors line-clamp-1">
           {product.name}
         </h3>
         
-        <div className="mb-6">
+        <div className="mb-3">
           {product.original_price && (
-            <span className="text-xs text-neutral-400 line-through block font-montserrat">
+            <span className="text-[9px] md:text-[10px] text-neutral-400 line-through block font-montserrat">
               ${product.original_price.toLocaleString()}
             </span>
           )}
-          <span className="text-2xl font-gotham font-bold text-primary">
+          <span className="text-sm md:text-base font-gotham font-bold text-primary">
             ${product.discount_price?.toLocaleString() || "S/D"}
           </span>
         </div>

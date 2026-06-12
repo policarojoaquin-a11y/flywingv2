@@ -51,26 +51,27 @@ export default function AboutUs() {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <div className="rounded-2xl w-full h-64 bg-neutral-100 flex flex-col items-center justify-center text-neutral-300 border border-neutral-100">
-                  <Package size={32} strokeWidth={1} />
-                </div>
-                <div className="rounded-2xl w-full h-80 bg-neutral-100 flex flex-col items-center justify-center text-neutral-300 border border-neutral-100">
-                  <Package size={32} strokeWidth={1} />
-                </div>
-              </div>
-              <div className="space-y-4 pt-8">
-                <div className="rounded-2xl w-full h-80 bg-neutral-100 flex flex-col items-center justify-center text-neutral-300 border border-neutral-100">
-                  <Package size={32} strokeWidth={1} />
-                </div>
-                <div className="rounded-2xl w-full h-64 bg-neutral-100 flex flex-col items-center justify-center text-neutral-300 border border-neutral-100">
-                  <Package size={32} strokeWidth={1} />
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <div className="rounded-3xl overflow-hidden shadow-xl border border-neutral-100 aspect-[4/5] bg-neutral-50">
+                  <img 
+                    src="/01_Showroom.jpg" 
+                    alt="Showroom Flywing 1" 
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
                 </div>
               </div>
-            </div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full border border-primary/20 shadow-xl z-20">
-              <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Fotos del Local Próximamente</p>
+              <div className="pt-10">
+                <div className="rounded-3xl overflow-hidden shadow-xl border border-neutral-100 aspect-[4/5] bg-neutral-50">
+                  <img 
+                    src="/02_Showroom.jpg" 
+                    alt="Showroom Flywing 2" 
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              </div>
             </div>
             {/* Decorative Background */}
             <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-secondary/10 rounded-full blur-3xl" />

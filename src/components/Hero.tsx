@@ -48,12 +48,12 @@ export default function Hero() {
               <Package size={14} />
               Venta Exclusiva Mayorista
             </div>
-            <h1 className="text-5xl md:text-8xl font-gotham font-extrabold leading-[0.9] text-neutral-900 mb-6">
-              IMPULSÁ TU <span className="text-primary">NEGOCIO</span> CON FLYWING
+            <h1 className="text-5xl md:text-7xl font-gotham font-extrabold leading-[1.0] text-neutral-900 mb-6 uppercase">
+              Un nuevo <br /> comienzo <br />
+              <span className="text-primary">Juntos es mejor</span>
             </h1>
             <p className="text-base md:text-lg text-neutral-gray font-montserrat max-w-lg mb-8 leading-relaxed">
-              Catálogo actualizado con las últimas tendencias en calzado. 
-              Packs curados por talle y modelo para maximizar tu rotación de stock.
+              Tenemos nuevas propuestas para potenciar tu negocio.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-12">

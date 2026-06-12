@@ -5,6 +5,7 @@ import { useCart } from "@/src/lib/store";
 import { trackEvent } from "@/src/lib/tracking";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { recordPreSaleReservation } from "@/src/lib/supabase";
 import { 
   Dialog, 
   DialogContent, 
@@ -49,6 +50,11 @@ export default function AddToCartDialog({ sneaker, isCompact = false }: AddToCar
       value: sneaker.discount_price || 0,
       currency: "ARS"
     });
+
+    // Record pre-sale reservation count
+    if (sneaker.is_preventa) {
+      recordPreSaleReservation(sneaker.id, sneaker.name, selectedColor, packs, sneaker.pack_size);
+    }
     
     setIsOpen(false);
     setPacks(1);
@@ -58,9 +64,13 @@ export default function AddToCartDialog({ sneaker, isCompact = false }: AddToCar
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger
         render={
-          <Button className={`w-full bg-primary hover:bg-primary/90 text-white rounded-full font-gotham font-bold tracking-widest flex items-center justify-center gap-2 ${isCompact ? 'h-10 text-xs md:h-12 md:text-base' : 'h-14 text-lg'}`}>
+          <Button className={`w-full text-white rounded-full font-gotham font-bold tracking-widest flex items-center justify-center gap-2 transition-all bg-primary hover:bg-primary/90 ${
+            sneaker.is_preventa ? 'shadow-md shadow-primary/15' : ''
+          } ${isCompact ? 'h-10 text-xs md:h-12 md:text-base' : 'h-14 text-lg'}`}>
             <ShoppingBag size={isCompact ? 14 : 18} />
-            {isCompact ? 'COMPRAR' : 'COMPRAR AHORA'}
+            {sneaker.is_preventa 
+              ? (isCompact ? 'RESERVAR' : 'RESERVAR AHORA') 
+              : (isCompact ? 'COMPRAR' : 'COMPRAR AHORA')}
           </Button>
         }
       />
@@ -94,13 +104,13 @@ export default function AddToCartDialog({ sneaker, isCompact = false }: AddToCar
             <div className="flex flex-wrap gap-1.5 md:gap-2">
               {sneaker.colors?.map(color => (
                 <button
-                  key={color}
-                  onClick={() => setSelectedColor(color)}
-                  className={`px-4 py-2 rounded-full border text-xs font-medium transition-all ${
-                    selectedColor === color 
-                    ? "bg-primary text-white border-primary shadow-md scale-105" 
-                    : "bg-white text-neutral-600 border-neutral-200 hover:border-primary"
-                  }`}
+                   key={color}
+                   onClick={() => setSelectedColor(color)}
+                   className={`px-4 py-2 rounded-full border text-xs font-medium transition-all ${
+                     selectedColor === color 
+                     ? "bg-primary text-white border-primary shadow-md scale-105" 
+                     : "bg-white text-neutral-600 border-neutral-200 hover:border-primary"
+                   }`}
                 >
                   {color}
                 </button>
@@ -138,10 +148,10 @@ export default function AddToCartDialog({ sneaker, isCompact = false }: AddToCar
 
         <DialogFooter className="sm:justify-start pt-4 border-t border-neutral-100">
           <Button 
-            className="w-full bg-primary hover:bg-primary/90 text-white rounded-full h-12 md:h-16 font-gotham font-bold tracking-widest text-base md:text-xl"
+            className="w-full bg-primary hover:bg-primary/90 text-white rounded-full h-12 md:h-16 font-gotham font-bold tracking-widest text-base md:text-xl transition-all"
             onClick={handleAdd}
           >
-            AGREGAR AL CARRITO
+            {sneaker.is_preventa ? 'CONFIRMAR RESERVA' : 'AGREGAR AL CARRITO'}
           </Button>
         </DialogFooter>
       </DialogContent>
